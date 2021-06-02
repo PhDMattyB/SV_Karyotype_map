@@ -246,7 +246,8 @@ karyotype_map_all = ggplot(please_work) +
   geom_scatterpie(data = spread_data, 
                   aes(x = Longitude, 
                       y = Latitude, 
-                      group = Population), 
+                      group = Population, 
+                      radius = 1), 
                   pie_scale = 0.5, 
                   cols = colnames(spread_data[,c(6:8)]))
 
