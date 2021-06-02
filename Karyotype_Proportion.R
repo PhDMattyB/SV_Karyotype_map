@@ -125,4 +125,6 @@ karyotype_map = ggplot(East_coastish) +
 ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.tiff', 
        plot = karyotype_map, 
        dpi = 'retina', 
-       units = 'cm')
+       units = 'cm', 
+       width = 20, 
+       height = 15)
