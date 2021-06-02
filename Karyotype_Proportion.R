@@ -128,3 +128,134 @@ ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.ti
        units = 'cm', 
        width = 20, 
        height = 15)
+
+
+
+# All populations on AC08 -------------------------------------------------
+ancestral_all = read_csv('All_Pops_AC08_Ancestral_karyotype.csv')
+Hetero_all = read_csv('All_Pops_AC08_Heterozygous_karyotype.csv')
+Inversion_all = read_csv('All_Pops_AC08_Derived_Karyotype.csv')
+
+
+
+# All pops AC08 data cleaning ---------------------------------------------
+
+
+inver_lab = rep('rearranged homozygous', 
+                length(Inversion_all$Population)) %>% 
+  as_tibble()
+inversion_all = bind_cols(Inversion_all, 
+                      inver_lab)
+
+anc_lab = rep('non-rearranged homozygous', 
+              length(ancestral_all$Population)) %>% 
+  as_tibble()
+ancestral_all = bind_cols(ancestral_all, 
+                      anc_lab)
+
+het_lab = rep('rearranged heterozygous', 
+              length(Hetero_all$Population)) %>% 
+  as_tibble()
+hetero_all = bind_cols(Hetero_all, 
+                   het_lab)
+
+
+bigger_pappi = bind_rows(inversion_all, 
+                      ancestral_all, 
+                      hetero_all)
+
+smallish_pappi = bigger_pappi %>% 
+  dplyr::select(Population, 
+                Latitude, 
+                Longitude) %>% 
+  distinct(Population, 
+           .keep_all = T)
+
+bigger_pappi_freq = bigger_pappi %>% 
+  group_by(Population, 
+           value) %>% 
+  summarise(n = n())%>%
+  mutate(freq = n / sum(n)) 
+
+clean_data = inner_join(bigger_pappi_freq, 
+                        smallish_pappi, 
+                        by = 'Population')
+
+spread_data = clean_data %>% 
+  group_by(value) %>% 
+  mutate(i1 = row_number()) %>% 
+  spread(value, 
+         freq) %>% 
+  replace(is.na(.), 0)
+
+
+# All pops AC08 map data --------------------------------------------------
+
+spread_data %>% 
+  arrange(-Longitude)
+  
+maine = map_data('state') %>%
+  filter(region == 'maine') %>% 
+  as_tibble()
+
+other_pops = map_data('world') %>% 
+  filter(region %in% c('Canada', 
+                       'Greenland', 
+                       'Norway', 
+                       'Iceland', 
+                       'UK', 
+                       'state'))%>% 
+  as_tibble()
+
+all_map_data = bind_rows(other_pops, 
+          maine)
+
+please_work =  all_map_data %>% 
+  rename(Latitude = lat, 
+         Longitude = long) %>% 
+  filter(Longitude < 20.00, 
+         Longitude > -80.00, 
+         Latitude < 70.00, 
+         Latitude > 43.0) %>% 
+  rename(lat = Latitude, 
+         long = Longitude)
+
+
+# All pops AC08 map -------------------------------------------------------
+map_palette = c('#D93E30', 
+                '#D91895',
+                '#0A21A6')
+
+karyotype_map_all = ggplot(please_work) +
+  geom_map(data = please_work, 
+           map = please_work, 
+           aes(x = long, 
+               y = lat, 
+               map_id = region), 
+           col = 'white', 
+           fill = 'black')+
+  labs(x = 'Longitude', 
+       y = 'Latitude', 
+       color = 'Karyotype', 
+       fill = 'Karyotype')+
+  scale_fill_manual(values = map_palette)+
+  theme(axis.title = element_text(size = 14), 
+        axis.text = element_text(size = 12), 
+        legend.title = element_text(size = 14), 
+        legend.text = element_text(size = 12))+
+  geom_scatterpie(data = spread_data, 
+                  aes(x = Longitude, 
+                      y = Latitude, 
+                      group = Population), 
+                  pie_scale = 0.5, 
+                  cols = colnames(spread_data[,c(6:8)]))
+
+karyotype_map_all
+
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.tiff', 
+       plot = karyotype_map, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 20, 
+       height = 15)
+
