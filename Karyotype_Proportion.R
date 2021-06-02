@@ -253,10 +253,8 @@ karyotype_map_all = ggplot(please_work) +
 
 karyotype_map_all
 
-ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.tiff', 
-       plot = karyotype_map, 
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map_All_populations.tiff', 
+       plot = karyotype_map_all, 
        dpi = 'retina', 
-       units = 'cm', 
-       width = 20, 
-       height = 15)
+       units = 'cm')
 
