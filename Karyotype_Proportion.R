@@ -119,7 +119,7 @@ karyotype_map = ggplot(East_coastish) +
                     aes(x = Longitude, 
                         y = Latitude, 
                         group = Population), 
-                    pie_scale = 3, 
+                    pie_scale = 2, 
                     cols = colnames(spread_data[,c(6:8)]))
   
 ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.tiff', 
