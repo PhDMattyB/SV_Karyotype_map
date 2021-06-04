@@ -12,6 +12,8 @@ library(tidyverse)
 library(maps)
 library(scatterpie)
 
+# Charr project -----------------------------------------------------------
+
 setwd('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Fst_sliding_window')
 
 
