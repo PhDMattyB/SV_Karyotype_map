@@ -96,9 +96,12 @@ East_coastish = map_data('world') %>%
 
 # Map plot ----------------------------------------------------------------
 
-map_palette = c('#D93E30', 
-                  '#D91895',
-                  '#0A21A6')
+map_palette = c('#0583F2', 
+                  '#F28705',
+                  '#F20530')
+
+theme_set(theme_bw())
+# theme_set(theme_void())
 
 karyotype_map = ggplot(East_coastish) +
     geom_map(data = East_coastish, 
@@ -123,6 +126,8 @@ karyotype_map = ggplot(East_coastish) +
                         group = Population), 
                     pie_scale = 2, 
                     cols = colnames(spread_data[,c(6:8)]))
+
+karyotype_map
   
 ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.tiff', 
        plot = karyotype_map, 
