@@ -71,13 +71,24 @@ clean_data = inner_join(big_pappi_freq,
            small_pappi, 
            by = 'Population')
 
+clean_data %>% 
+  filter(value == 'rearranged homozygous') %>% 
+  mutate(percent = freq*100) %>% 
+  View()
+
 spread_data = clean_data %>% 
   group_by(value) %>% 
   mutate(i1 = row_number()) %>% 
   spread(value, 
          freq) %>% 
-  replace(is.na(.), 0)
-
+  replace(is.na(.), 0) %>% 
+  group_by(Population) %>% 
+  mutate(Lat_jitter = Latitude + (Latitude[1] - jitter(Latitude[1], 
+                                           amount = 1,
+                                           factor = 1)), 
+       Long_jitter = Longitude + (Longitude[1] - jitter(Longitude[1], 
+                                              amount = 1,
+                                              factor = 0.9)))
 
 # Map data ----------------------------------------------------------------
 
@@ -96,9 +107,13 @@ East_coastish = map_data('world') %>%
 
 # Map plot ----------------------------------------------------------------
 
-map_palette = c('#0583F2', 
-                  '#F28705',
-                  '#F20530')
+# map_palette = c('#0583F2', 
+#                   '#F28705',
+#                   '#F20530')
+
+new_palette = c('#03588C',
+                '#F25C5C',
+                '#04BFAD')
 
 theme_set(theme_bw())
 # theme_set(theme_void())
@@ -115,21 +130,22 @@ karyotype_map = ggplot(East_coastish) +
        y = 'Latitude', 
        color = 'Karyotype', 
        fill = 'Karyotype')+
-  scale_fill_manual(values = map_palette)+
+  # scale_fill_manual(values = map_palette)+
+  scale_fill_manual(values = new_palette)+
   theme(axis.title = element_text(size = 14), 
         axis.text = element_text(size = 12), 
         legend.title = element_text(size = 14), 
         legend.text = element_text(size = 12))+
     geom_scatterpie(data = spread_data, 
-                    aes(x = Longitude, 
-                        y = Latitude, 
+                    aes(x = Long_jitter, 
+                        y = Lat_jitter, 
                         group = Population), 
                     pie_scale = 2, 
                     cols = colnames(spread_data[,c(6:8)]))
 
 karyotype_map
   
-ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map.tiff', 
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map_Newcols.tiff', 
        plot = karyotype_map, 
        dpi = 'retina', 
        units = 'cm', 
