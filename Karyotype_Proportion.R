@@ -85,10 +85,11 @@ big_pappi %>%
                 Longitude, 
                 Loc2, 
                 value) %>% 
-  # filter(value %in% c('rearranged homozygous', 
-  #                     'non-rearranged homozygous', 
-  #                     'rearranged heterozygous')) %>% 
-  filter(value == 'rearranged homozygous') %>% 
+  filter(value %in% c('rearranged homozygous',
+                      'non-rearranged homozygous',
+                      'rearranged heterozygous')) %>%
+  # filter(value == 'rearranged homozygous') %>%
+  filter(Population == 'NOR') %>% 
   # filter(Population %!in% c('BLD', 
   #                           'BRG', 
   #                           'ENG', 
@@ -96,6 +97,7 @@ big_pappi %>%
   arrange(Population, 
           value) %>% 
   group_by(Population, 
+           Name,
            value) %>% 
   summarise(num = n()) %>% 
   View()
