@@ -12,6 +12,10 @@ library(tidyverse)
 library(maps)
 library(scatterpie)
 
+
+# Functions ---------------------------------------------------------------
+
+`%!in%` = Negate(`%in%`)
 # Charr project -----------------------------------------------------------
 
 setwd('~/Charr_Adaptive_Introgression/Charr_Project_1/GeneticData/Fst_sliding_window')
@@ -37,6 +41,7 @@ inver_lab = rep('rearranged homozygous',
 inversion = bind_cols(inversion, 
                       inver_lab)
 
+View(inversion)
 anc_lab = rep('non-rearranged homozygous', 
               length(ancestral$Population)) %>% 
   as_tibble()
@@ -54,6 +59,7 @@ big_pappi = bind_rows(inversion,
                       ancestral, 
                       hetero)
 
+View(big_pappi)
 small_pappi = big_pappi %>% 
   dplyr::select(Population, 
          Latitude, 
@@ -66,6 +72,33 @@ big_pappi_freq = big_pappi %>%
            value) %>% 
   summarise(n = n())%>%
   mutate(freq = n / sum(n)) 
+
+
+big_pappi %>% 
+  # filter(Population %in% c('FRD', 
+  #                         'FRN')) %>% 
+  # filter(value == 'rearranged heterozygous') %>%
+  dplyr::select(Population, 
+                IndividualID, 
+                Name, 
+                Latitude, 
+                Longitude, 
+                Loc2, 
+                value) %>% 
+  # filter(value %in% c('rearranged homozygous', 
+  #                     'non-rearranged homozygous', 
+  #                     'rearranged heterozygous')) %>% 
+  filter(value == 'rearranged homozygous') %>% 
+  # filter(Population %!in% c('BLD', 
+  #                           'BRG', 
+  #                           'ENG', 
+  #                           'GDL')) %>%
+  arrange(Population, 
+          value) %>% 
+  group_by(Population, 
+           value) %>% 
+  summarise(num = n()) %>% 
+  View()
 
 clean_data = inner_join(big_pappi_freq, 
            small_pappi, 
@@ -90,6 +123,7 @@ spread_data = clean_data %>%
                                               amount = 1,
                                               factor = 0.9)))
 
+View(spread_data)
 # Map data ----------------------------------------------------------------
 
 East_coastish = map_data('world') %>% 
