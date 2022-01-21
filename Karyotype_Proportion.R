@@ -99,8 +99,8 @@ big_pappi %>%
   group_by(Population, 
            Name,
            value) %>% 
-  summarise(num = n()) %>% 
-  View()
+  # summarise(num = n()) %>% 
+  write_csv('NOR_AC08_SV.csv')
 
 clean_data = inner_join(big_pappi_freq, 
            small_pappi, 
