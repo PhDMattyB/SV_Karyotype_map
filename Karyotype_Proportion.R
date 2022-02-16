@@ -188,6 +188,13 @@ ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map_Ne
        width = 20, 
        height = 15)
 
+ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map_pdf.pdf', 
+       plot = karyotype_map, 
+       dpi = 'retina', 
+       units = 'cm', 
+       width = 20, 
+       height = 15)
+
 
 ##
 # All populations on AC08 -------------------------------------------------
