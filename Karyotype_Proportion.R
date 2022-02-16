@@ -189,7 +189,7 @@ ggsave('~/Charr_Adaptive_Introgression/Charr_Project_1/Figures/Karyotypes_map_Ne
        height = 15)
 
 
-
+##
 # All populations on AC08 -------------------------------------------------
 ancestral_all = read_csv('All_Pops_AC08_Ancestral_karyotype.csv')
 Hetero_all = read_csv('All_Pops_AC08_Heterozygous_karyotype.csv')
