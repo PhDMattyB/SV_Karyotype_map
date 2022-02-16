@@ -119,11 +119,11 @@ spread_data = clean_data %>%
   replace(is.na(.), 0) %>% 
   group_by(Population) %>% 
   mutate(Lat_jitter = Latitude + (Latitude[1] - jitter(Latitude[1], 
-                                           amount = 1,
-                                           factor = 1)), 
+                                           amount = 2,
+                                           factor = 1.75)), 
        Long_jitter = Longitude + (Longitude[1] - jitter(Longitude[1], 
-                                              amount = 1,
-                                              factor = 0.9)))
+                                              amount = 2,
+                                              factor = 1.75)))
 
 View(spread_data)
 # Map data ----------------------------------------------------------------
