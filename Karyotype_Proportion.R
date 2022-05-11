@@ -41,7 +41,7 @@ inver_lab = rep('rearranged homozygous',
 inversion = bind_cols(inversion, 
                       inver_lab)
 
-View(inversion)
+# View(inversion)
 anc_lab = rep('non-rearranged homozygous', 
               length(ancestral$Population)) %>% 
   as_tibble()
@@ -58,6 +58,16 @@ hetero = bind_cols(hetero,
 big_pappi = bind_rows(inversion, 
                       ancestral, 
                       hetero)
+
+
+big_pappi %>% 
+  dplyr::select(Population, 
+                IndividualID, 
+                Name, 
+                Latitude, 
+                Longitude, 
+                value) %>% 
+  write_csv('AC08_SV_IndividualID_List.csv')
 
 View(big_pappi)
 small_pappi = big_pappi %>% 
