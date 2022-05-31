@@ -69,7 +69,7 @@ big_pappi %>%
                 value) %>% 
   write_csv('AC08_SV_IndividualID_List.csv')
 
-View(big_pappi)
+# View(big_pappi)
 small_pappi = big_pappi %>% 
   dplyr::select(Population, 
          Latitude, 
@@ -77,6 +77,8 @@ small_pappi = big_pappi %>%
   distinct(Population, 
            .keep_all = T)
 
+## calculating the frequency of each inversion
+## per population
 big_pappi_freq = big_pappi %>% 
   group_by(Population, 
            value) %>% 
@@ -84,42 +86,42 @@ big_pappi_freq = big_pappi %>%
   mutate(freq = n / sum(n)) 
 
 
-big_pappi %>% 
-  # filter(Population %in% c('FRD', 
-  #                         'FRN')) %>% 
-  # filter(value == 'rearranged heterozygous') %>%
-  dplyr::select(Population, 
-                IndividualID, 
-                Name, 
-                Latitude, 
-                Longitude, 
-                Loc2, 
-                value) %>% 
-  filter(value %in% c('rearranged homozygous',
-                      'non-rearranged homozygous',
-                      'rearranged heterozygous')) %>%
-  # filter(value == 'rearranged homozygous') %>%
-  filter(Population == 'NOR') %>% 
-  # filter(Population %!in% c('BLD', 
-  #                           'BRG', 
-  #                           'ENG', 
-  #                           'GDL')) %>%
-  arrange(Population, 
-          value) %>% 
-  group_by(Population, 
-           Name,
-           value) %>% 
-  # summarise(num = n()) %>% 
-  write_csv('NOR_AC08_SV.csv')
+# big_pappi %>% 
+#   # filter(Population %in% c('FRD', 
+#   #                         'FRN')) %>% 
+#   # filter(value == 'rearranged heterozygous') %>%
+#   dplyr::select(Population, 
+#                 IndividualID, 
+#                 Name, 
+#                 Latitude, 
+#                 Longitude, 
+#                 Loc2, 
+#                 value) %>% 
+#   filter(value %in% c('rearranged homozygous',
+#                       'non-rearranged homozygous',
+#                       'rearranged heterozygous')) %>%
+#   # filter(value == 'rearranged homozygous') %>%
+#   filter(Population == 'NOR') %>% 
+#   # filter(Population %!in% c('BLD', 
+#   #                           'BRG', 
+#   #                           'ENG', 
+#   #                           'GDL')) %>%
+#   arrange(Population, 
+#           value) %>% 
+#   group_by(Population, 
+#            Name,
+#            value) %>% 
+#   # summarise(num = n()) %>% 
+#   write_csv('NOR_AC08_SV.csv')
 
 clean_data = inner_join(big_pappi_freq, 
            small_pappi, 
            by = 'Population')
 
-clean_data %>% 
-  filter(value == 'rearranged homozygous') %>% 
-  mutate(percent = freq*100) %>% 
-  View()
+# clean_data %>% 
+#   filter(value == 'rearranged homozygous') %>% 
+#   mutate(percent = freq*100) %>% 
+#   View()
 
 spread_data = clean_data %>% 
   group_by(value) %>% 
